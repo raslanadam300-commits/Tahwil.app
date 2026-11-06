@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tahwil · Unit Converter</title>
+<script>
+  (function(){
+    const root = document.documentElement;
+    const lang = localStorage.getItem('tahwil-lang') || 'ar';
+    root.lang = lang;
+    root.dir = lang === 'en' ? 'ltr' : 'rtl';
+    const theme = localStorage.getItem('tahwil-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.dataset.theme = theme;
+  })();
+</script>
+<style>
+:root{--bg1:#eef2ff;--bg2:#fdf2f8;--card:rgba(255,255,255,.85);--tx:#1e1b4b;--mut:#64668a;--ac:#6366f1;--ac2:#ec4899;--bd:rgba(99,102,241,.18);--sh:0 10px 30px -12px rgba(79,70,229,.35);--inp:#fff}
+[data-theme="dark"]{--bg1:#0b0d1f;--bg2:#1a0b2e;--card:rgba(30,33,60,.78);--tx:#eef0ff;--mut:#9aa0c8;--ac:#818cf8;--ac2:#f472b6;--bd:rgba(129,140,248,.2);--sh:0 10px 30px -12px rgba(0,0,0,.6);--inp:#151833}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+html[lang="en"] .ar,html[lang="ar"] .en{display:none}
+body{margin:0;min-height:100vh;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;color:var(--tx);background:linear-gradient(135deg,var(--bg1),var(--bg2)) fixed}
+#splash{position:fixed;inset:0;z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b0d1f;color:#fff;overflow:hidden;transition:opacity .8s ease,visibility .8s,transform .8s ease;cursor:pointer;text-align:center}
+#splash.gone{opacity:0;visibility:hidden;transform:scale(1.08)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:float 12s ease-in-out infinite alternate}
+.b1{width:420px;height:420px;background:#6366f1;top:-120px;left:-100px}
+.b2{width:380px;height:380px;background:#ec4899;bottom:-120px;right:-80px;animation-delay:-4s}
+.b3{width:300px;height:300px;background:#22d3ee;top:40%;left:55%;animation-delay:-8s}
+@keyframes float{to{transform:translate(60px,-40px) scale(1.15)}}
+.ring{position:relative;width:150px;height:150px;display:grid;place-items:center}
+.ring::before{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#fff;border-right-color:#ec4899;animation:spin 1.6s linear infinite}
+.ring::after{content:"";position:absolute;inset:14px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+.sp-logo{font-size:4rem;animation:logoIn 1s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes logoIn{from{transform:scale(0) rotate(-180deg);opacity:0}to{transform:none;opacity:1}}
+.title{font-size:3.6rem;font-weight:900;letter-spacing:3px;margin-top:18px;background:linear-gradient(90deg,#fff,#c7d2fe,#fbcfe8,#fff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 3s linear infinite,rise .9s .3s both}
+@keyframes shine{to{background-position:300% 0}}
+@keyframes rise{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.tag{margin:10px 0 0;font-size:1.05rem;opacity:0;animation:rise .9s .8s forwards}
+.bar{width:220px;height:3px;background:rgba(255,255,255,.18);border-radius:9px;margin-top:28px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#f0abfc);animation:load 2.2s .2s ease forwards}
+@keyframes load{to{width:100%}}
+.by{margin-top:20px;font-size:.9rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;background:linear-gradient(90deg,#fff 0%,#f0abfc 25%,#fff 50%,#22d3ee 75%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:rise .9s 1.1s forwards,wave 3s 2s linear infinite}
+@keyframes wave{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.skip{position:absolute;bottom:22px;font-size:.75rem;opacity:.5}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 20px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px);background:var(--card);border-bottom:1px solid var(--bd)}
+.logo{font-size:1.2rem;font-weight:700;text-decoration:none}
+.grad,.hero b{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+nav a{color:var(--mut);text-decoration:none;margin-inline-start:12px;font-weight:600;font-size:.92rem}
+nav a:hover{color:var(--ac)}
+.ctrl{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:999px;padding:5px 12px;font-size:.85rem;margin-inline-start:10px;cursor:pointer}
+main{max-width:800px;margin:0 auto;padding:24px 16px 30px}
+section{scroll-margin-top:70px}
+.hero{text-align:center;padding:14px 0 22px}
+.hero h1{font-size:2.3rem;margin:0 0 8px}
+.sub,.note{color:var(--mut);font-size:.92rem;margin:0 0 14px}
+#search{width:100%;max-width:520px;padding:14px 18px;border-radius:999px;border:1px solid var(--bd);background:var(--inp);color:var(--tx);font:inherit;font-size:1rem;outline:none}
+#search:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--bd)}
+.card{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--bd);border-radius:22px;padding:22px;box-shadow:var(--sh);margin-bottom:18px}
+h2{margin:0 0 14px;font-size:1.3rem}
+h3{margin:18px 0 8px;font-size:1rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select{flex:1;min-width:110px;padding:12px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--inp);color:var(--tx);font:inherit;font-size:1.03rem;outline:none}
+input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--bd)}
+button{padding:11px 18px;border:0;border-radius:14px;background:linear-gradient(90deg,var(--ac),var(--ac2));color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:hover{filter:brightness(1.08)}
+.ghost{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+.swap{flex:0 0 auto;padding:11px 14px}
+.result{font-size:1.9rem;font-weight:800;margin:18px 0 10px;word-break:break-all;direction:ltr;text-align:start;min-height:2.3rem;cursor:copy;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--ac);font-weight:600;padding:6px 0}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.95rem}
+td{padding:9px 8px;border-bottom:1px solid var(--bd)}
+td+td{text-align:end;direction:ltr;font-weight:600;font-variant-numeric:tabular-nums}
+.rates{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
+.rates label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--mut)}
+.rates input{min-width:0;padding:9px}
+.cards4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.mini{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px}
+.mini span{color:var(--mut);font-size:.85rem}
+.mini b{display:block;font-size:1.2rem;direction:ltr;text-align:start;margin-top:6px;word-break:break-all}
+footer{text-align:center;color:var(--mut);font-size:.85rem;padding:20px}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i>
+  <div class="ring"><div class="sp-logo">🔄</div></div>
+  <div class="title">Tahwil</div>
+  <p class="tag"><span class="ar">محوّل الوحدات الشامل</span><span class="en">The Complete Unit Converter</span></p>
+  <div class="bar"><i></i></div>
+  <div class="by">by Adam Raslan</div>
+  <div class="skip"><span class="ar">اضغط للتخطي</span><span class="en">Tap to skip</span></div>
+</div>
+
+<header class="top">
+  <a class="logo" href="#top"><span class="grad">🔄 Tahwil</span></a>
+  <nav>
+    <a href="#units"><span class="ar">الوحدات</span><span class="en">Units</span></a>
+    <a href="#cat-currency"><span class="ar">العملات</span><span class="en">Currency</span></a>
+    <a href="#date"><span class="ar">الهجري</span><span class="en">Hijri</span></a>
+    <a href="#numbers"><span class="ar">الأعداد</span><span class="en">Numbers</span></a>
+    <button class="ctrl" id="langBtn">English</button>
+    <button class="ctrl" id="themeBtn" title="Theme">🌓</button>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <h1><span class="ar">مرحباً بك في </span><span class="en">Welcome to </span><b>Tahwil</b></h1>
+    <p class="sub"><span class="ar">كل المحوّلات في مكان واحد. ابحث عن أي وحدة، أو انزل تحت وكمّل.</span><span class="en">All converters in one place. Search for any unit, or scroll down.</span></p>
+    <input id="search">
+  </section>
+
+  <div id="units"></div>
+
+  <section class="card" id="date">
+    <h2>📅 <span class="ar">التاريخ الهجري</span><span class="en">Hijri Date</span></h2>
+    <h3><span class="ar">ميلادي ← هجري</span><span class="en">Gregorian → Hijri</span></h3>
+    <div class="row">
+      <input type="date" id="gIn" aria-label="Gregorian date">
+      <button class="ghost" id="today"><span class="ar">اليوم</span><span class="en">Today</span></button>
+    </div>
+    <div class="result" id="gOut">—</div>
+
+    <h3><span class="ar">هجري ← ميلادي</span><span class="en">Hijri → Gregorian</span></h3>
+    <div class="row">
+      <input type="number" id="hD" min="1" max="30" value="1" aria-label="Day">
+      <select id="hM" aria-label="Month"></select>
+      <input type="number" id="hY" aria-label="Year">
+    </div>
+    <div class="result" id="hOut">—</div>
+    <p class="note"><span class="ar">التحويل بالتقويم الحسابي، وقد يختلف يوماً عن رؤية الهلال الفعلية.</span><span class="en">Calculated with the arithmetic (tabular) calendar; it may differ by one day from actual moon sighting.</span></p>
+  </section>
+
+  <section class="card" id="numbers">
+    <h2>🔢 <span class="ar">الأنظمة العددية</span><span class="en">Number Systems</span></h2>
+    <p class="sub"><span class="ar">اكتب رقماً واختار أساسه، وهيتحول لباقي الأنظمة</span><span class="en">Type a number and choose its base; it will convert to the others</span></p>
+    <div class="row">
+      <input id="nIn" value="255" aria-label="Number">
+      <select id="nBase" aria-label="Base">
+        <option value="2">Binary (2)</option>
+        <option value="8">Octal (8)</option>
+        <option value="10" selected>Decimal (10)</option>
+        <option value="16">Hexadecimal (16)</option>
+      </select>
+    </div>
+    <div class="cards4" id="nOut"></div>
+  </section>
+</main>
+
+<footer>Tahwil · by Adam Raslan</footer>
+
+<script>
+/* ================= الإعدادات ================= */
+const EN = document.documentElement.lang === 'en';
+const T = (ar, en) => EN ? en : ar;
+
+/* ================= البيانات: [عربي، إنجليزي، معامل التحويل] ================= */
+const CATS = {
+  length:{n:['الطول','Length'],i:'📏',u:{m:['متر','Meter',1],km:['كيلومتر','Kilometer',1000],cm:['سنتيمتر','Centimeter',0.01],mm:['ملليمتر','Millimeter',0.001],mi:['ميل','Mile',1609.344],yd:['ياردة','Yard',0.9144],ft:['قدم','Foot',0.3048],in:['بوصة','Inch',0.0254],nmi:['ميل بحري','Nautical mile',1852],dhar:['ذراع (تقريبي)','Cubit (approx.)',0.5]}},
+  mass:{n:['الوزن','Mass'],i:'⚖️',u:{kg:['كيلوجرام','Kilogram',1],g:['جرام','Gram',0.001],mg:['ملليجرام','Milligram',1e-6],t:['طن','Metric ton',1000],lb:['رطل إنجليزي','Pound',0.45359237],oz:['أونصة','Ounce',0.0283495],rotl:['رطل مصري (تقريبي)','Egyptian rotl (approx.)',0.449],qir:['قيراط ذهب','Gold carat',0.0002],st:['ستون','Stone',6.35029]}},
+  volume:{n:['الحجم','Volume'],i:'🧪',u:{L:['لتر','Liter',1],ml:['ملليلتر','Milliliter',0.001],cm3:['سم مكعب','Cubic centimeter',0.001],m3:['متر مكعب','Cubic meter',1000],gal:['جالون أمريكي','US gallon',3.78541],cup:['كوب أمريكي','US cup',0.236588],tbsp:['ملعقة كبيرة','Tablespoon',0.0147868],tsp:['ملعقة صغيرة','Teaspoon',0.00492892],bbl:['برميل نفط','Oil barrel',158.987]}},
+  area:{n:['المساحة','Area'],i:'▦',u:{m2:['متر مربع','Square meter',1],km2:['كيلومتر مربع','Square kilometer',1e6],cm2:['سم مربع','Square centimeter',1e-4],ft2:['قدم مربع','Square foot',0.092903],yd2:['ياردة مربعة','Square yard',0.836127],acre:['إيكر','Acre',4046.86],hect:['هكتار','Hectare',1e4],feddan:['فدان مصري','Egyptian feddan',4200.83],qirat:['قيراط أرض','Land qirat',175.035]}},
+  speed:{n:['السرعة','Speed'],i:'🚀',u:{ms:['متر/ثانية','Meter/second',1],kmh:['كم/ساعة','Km/h',1/3.6],mph:['ميل/ساعة','Mile/h',0.44704],kn:['عقدة بحرية','Knot',0.514444],mach:['ماخ (تقريبي)','Mach (approx.)',340.29]}},
+  time:{n:['الوقت','Time'],i:'⏱️',u:{ms:['ملي ثانية','Millisecond',0.001],s:['ثانية','Second',1],min:['دقيقة','Minute',60],h:['ساعة','Hour',3600],d:['يوم','Day',86400],w:['أسبوع','Week',604800],mo:['شهر (متوسط)','Month (avg.)',2629746],y:['سنة ميلادية','Year',31556952],dec:['عقد','Decade',315569520]}},
+  pressure:{n:['الضغط','Pressure'],i:'🌡️',u:{Pa:['باسكال','Pascal',1],kPa:['كيلوباسكال','Kilopascal',1000],bar:['بار','Bar',1e5],atm:['جو','Atmosphere',101325],psi:['رطل/بوصة²','PSI',6894.757],mmHg:['ملم زئبق','mmHg',133.322]}},
+  energy:{n:['الطاقة','Energy'],i:'⚡',u:{J:['جول','Joule',1],kJ:['كيلوجول','Kilojoule',1000],cal:['سعر حراري','Calorie',4.184],kcal:['كيلو كالوري','Kilocalorie',4184],kWh:['كيلوواط ساعة','Kilowatt-hour',3.6e6],eV:['إلكترون فولت','Electronvolt',1.602177e-19]}},
+  data:{n:['البيانات','Data'],i:'💾',u:{b:['بت','Bit',0.125],B:['بايت','Byte',1],KB:['كيلوبايت','Kilobyte',1024],MB:['ميجابايت','Megabyte',1024**2],GB:['جيجابايت','Gigabyte',1024**3],TB:['تيرابايت','Terabyte',1024**4]}},
+  temp:{n:['الحرارة','Temperature'],i:'🌡️',temp:true,u:{C:['درجة مئوية','Celsius',0],F:['فهرنهايت','Fahrenheit',0],K:['كلفن','Kelvin',0],R:['رانكين','Rankine',0]}},
+  currency:{n:['العملات','Currency'],i:'💱',u:{USD:['دولار أمريكي','US Dollar',1],EUR:['يورو','Euro',1/0.92],GBP:['جنيه إسترليني','British Pound',1/0.79],EGP:['جنيه مصري','Egyptian Pound',1/50.5],SAR:['ريال سعودي','Saudi Riyal',1/3.75],AED:['درهم إماراتي','UAE Dirham',1/3.6725],KWD:['دينار كويتي','Kuwaiti Dinar',1/0.307],JPY:['ين ياباني','Japanese Yen',1/150],CNY:['يوان صيني','Chinese Yuan',1/7.2],TRY:['ليرة تركية','Turkish Lira',1/34]}}
+};
+const uName = (c, k) => EN ? CATS[c].u[k][1] : CATS[c].u[k][0];
+const cName = c => EN ? CATS[c].n[1] : CATS[c].n[0];
+
+const HM  = ['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+const HME = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Ula','Jumada al-Akhira','Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
+const GM  = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const GME = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WD  = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const WDE = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const $ = id => document.getElementById(id);
+
+/* ================= دوال مشتركة ================= */
+function conv(c, f, t, v){
+  if(CATS[c].temp){
+    const k = f==='C'?v+273.15 : f==='F'?(v-32)*5/9+273.15 : f==='R'?v*5/9 : v;
+    return t==='C'?k-273.15 : t==='F'?(k-273.15)*9/5+32 : t==='R'?k*9/5 : k;
+  }
+  const U = CATS[c].u;
+  return v*U[f][2]/U[t][2];
+}
+function fmt(x){
+  if(!isFinite(x)) return '—';
+  const a = Math.abs(x);
+  if(x!==0 && (a>=1e15 || a<1e-6)) return x.toExponential(6);
+  return Number(x.toPrecision(12)).toLocaleString(EN ? 'en-US' : 'ar-EG', {maximumFractionDigits:12});
+}
+
+/* ================= أسعار العملات الحيّة ================= */
+const RATE_KEY = 'tahwil-rates-v1';
+let rateNote = T('جاري تحميل الأسعار...', 'Loading rates...');
+
+async function loadRates(){
+  const cached = JSON.parse(localStorage.getItem(RATE_KEY) || 'null');
+  let data = cached && Date.now() - cached.t < 6*3600e3 ? cached : null;
+  if(!data){
+    try{
+      const ctrl = new AbortController();
+      setTimeout(() => ctrl.abort(), 4000);
+      const r = await fetch('https://open.er-api.com/v6/latest/USD', {signal: ctrl.signal});
+      const j = await r.json();
+      if(j.result === 'success'){
+        data = {t: Date.now(), rates: j.rates, upd: j.time_last_update_utc};
+        localStorage.setItem(RATE_KEY, JSON.stringify(data));
+      }
+    }catch(e){ data = cached; }
+  }
+  if(data){
+    for(const k in data.rates) if(CATS.currency.u[k]) CATS.currency.u[k][2] = 1 / data.rates[k];
+    rateNote = T(`أسعار محدّثة · آخر تحديث من المصدر: ${data.upd}`, `Live rates · Last updated by source: ${data.upd}`);
+  } else {
+    rateNote = T('تعذّر تحميل الأسعار، وبتظهر الأسعار التقريبية', 'Could not load live rates; showing approximate rates');
+  }
+}
+
+/* ================= بناء المحوّلات ================= */
+function buildCategory(k){
+  const C = CATS[k], keys = Object.keys(C.u);
+  const sec = document.createElement('section');
+  sec.className = 'card cat';
+  sec.id = 'cat-' + k;
+  sec.dataset.name = C.n.join(' ') + ' ' + keys.map(u => C.u[u][0] + ' ' + C.u[u][1]).join(' ');
+  sec.innerHTML = `
+    <h2>${C.i} ${cName(k)}</h2>
+    <div class="row">
+      <input type="number" step="any" value="1" aria-label="value">
+      <select class="f" aria-label="from"></select>
+      <button class="swap" title="${T('تبديل','Swap')}">⇄</button>
+      <select class="t" aria-label="to"></select>
+    </div>
+    <div class="result"></div>
+    <details><summary>${T('عرض كل التحويلات','Show all conversions')}</summary><table></table></details>
+    ${k==='currency' ? `<p class="note">${rateNote}</p><details><summary>${T('تعديل أسعار الصرف (مقابل الدولار)','Edit exchange rates (vs USD)')}</summary><div class="rates"></div></details>` : ''}`;
+
+  const val = sec.querySelector('input'), f = sec.querySelector('.f'), t = sec.querySelector('.t');
+  const res = sec.querySelector('.result'), tbl = sec.querySelector('table');
+  keys.forEach(u => { f.add(new Option(uName(k,u), u)); t.add(new Option(uName(k,u), u)); });
+  f.value = keys[0];
+  t.value = keys[1] || keys[0];
+
+  function calc(){
+    const v = parseFloat(val.value);
+    if(isNaN(v)){ res.textContent = '—'; tbl.innerHTML = ''; return; }
+    res.textContent = `${fmt(conv(k, f.value, t.value, v))} ${uName(k, t.value)}`;
+    tbl.innerHTML = keys.map(u => `<tr><td>${uName(k,u)}</td><td>${fmt(conv(k, f.value, u, v))}</td></tr>`).join('');
+  }
+  val.oninput = f.onchange = t.onchange = calc;
+  sec.querySelector('.swap').onclick = () => { const a = f.value; f.value = t.value; t.value = a; calc(); };
+
+  if(k === 'currency'){
+    const box = sec.querySelector('.rates');
+    keys.forEach(u => {
+      if(u === 'USD') return;
+      const l = document.createElement('label');
+      l.textContent = u;
+      const i = document.createElement('input');
+      i.type = 'number'; i.step = 'any';
+      i.value = +(1 / C.u[u][2]).toFixed(4);
+      i.oninput = () => { const r = parseFloat(i.value); if(r > 0){ C.u[u][2] = 1 / r; calc(); } };
+      l.appendChild(i);
+      box.appendChild(l);
+    });
+  }
+  calc();
+  return sec;
+}
+
+for(const k of Object.keys(CATS)) $('units').appendChild(buildCategory(k));
+loadRates().then(() => $('cat-currency').replaceWith(buildCategory('currency')));
+
+/* ================= البحث ================= */
+$('search').placeholder = T('🔍 ابحث عن وحدة... مثلاً: ميل، بار، دولار', '🔍 Search a unit... e.g. mile, bar, dollar');
+$('search').oninput = e => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.cat').forEach(s => {
+    s.hidden = q !== '' && !s.dataset.name.toLowerCase().includes(q);
+  });
+};
+
+/* ================= التاريخ الهجري ================= */
+const HMn = EN ? HME : HM, GMn = EN ? GME : GM, WDn = EN ? WDE : WD;
+const EPOCH = 1948439.5;
+function gJD(y, m, d){
+  if(m <= 2){ y--; m += 12; }
+  const a = Math.floor(y/100), b = 2 - a + Math.floor(a/4);
+  return Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + b - 1524.5;
+}
+function jdG(jd){
+  const Z = Math.floor(jd+0.5), B = Z+1524, C = Math.floor((B-122.1)/365.25);
+  const D = Math.floor(365.25*C), E = Math.floor((B-D)/30.6001);
+  const d = B - D - Math.floor(30.6001*E);
+  const m = E < 14 ? E-1 : E-13;
+  const y = m > 2 ? C-4716 : C-4715;
+  return [y, m, d];
+}
+function hJD(y, m, d){
+  return d + Math.ceil(29.5*(m-1)) + (y-1)*354 + Math.floor((3+11*y)/30) + EPOCH - 1;
+}
+function jdH(jd){
+  jd = Math.floor(jd) + 0.5;
+  const y = Math.floor((30*(jd-EPOCH)+10646)/10631);
+  const m = Math.min(12, Math.ceil((jd-29-hJD(y,1,1))/29.5)+1);
+  const d = jd - hJD(y,m,1) + 1;
+  return [y, m, d];
+}
+const weekday = jd => WDn[Math.floor(jd+1.5) % 7];
+
+function gToH(){
+  if(!$('gIn').value) return;
+  const [y, m, d] = $('gIn').value.split('-').map(Number);
+  const jd = gJD(y, m, d), [hy, hm, hd] = jdH(jd);
+  $('gOut').textContent = EN
+    ? `${weekday(jd)}, ${hd} ${HMn[hm-1]} ${hy} AH`
+    : `${weekday(jd)}، ${hd} ${HMn[hm-1]} ${hy} هـ`;
+}
+function hToG(){
+  const hy = +$('hY').value, hm = +$('hM').value + 1, hd = +$('hD').value;
+  if(!hy || !hd) return;
+  const jd = hJD(hy, hm, hd), [gy, gm, gd] = jdG(jd);
+  $('hOut').textContent = EN
+    ? `${weekday(jd)}, ${gd} ${GMn[gm-1]} ${gy} CE`
+    : `${weekday(jd)}، ${gd} ${GMn[gm-1]} ${gy} م`;
+}
+const now = new Date();
+const iso = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+HMn.forEach((n, i) => $('hM').add(new Option(n, i)));
+const [hy0, hm0, hd0] = jdH(gJD(now.getFullYear(), now.getMonth()+1, now.getDate()));
+$('hY').value = hy0; $('hM').value = hm0 - 1; $('hD').value = hd0;
+$('gIn').value = iso;
+$('gIn').oninput = gToH;
+$('today').onclick = () => { $('gIn').value = iso; gToH(); };
+['hD','hM','hY'].forEach(id => $(id).oninput = hToG);
+$('hM').onchange = hToG;
+gToH(); hToG();
+
+/* ================= الأنظمة العددية ================= */
+function renderNumbers(){
+  const n = parseInt($('nIn').value.trim().replace(/\s/g,''), +$('nBase').value);
+  const bases = [[2, T('ثنائي','Binary')], [8, T('ثماني','Octal')], [10, T('عشري','Decimal')], [16, T('سداسي عشر','Hexadecimal')]];
+  $('nOut').innerHTML = bases.map(([b, name]) =>
+    `<div class="mini"><span>${name} (${T('الأساس','base')} ${b})</span><b>${isNaN(n) ? '—' : n.toString(b).toUpperCase()}</b></div>`).join('');
+}
+$('nIn').oninput = renderNumbers;
+$('nBase').onchange = renderNumbers;
+renderNumbers();
+
+/* ================= عام ================= */
+document.addEventListener('click', e => {
+  if(e.target.classList.contains('result')) navigator.clipboard?.writeText(e.target.textContent);
+});
+$('themeBtn').onclick = () => {
+  const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem('tahwil-theme', t);
+};
+$('langBtn').onclick = () => {
+  localStorage.setItem('tahwil-lang', EN ? 'ar' : 'en');
+  location.reload();
+};
+$('langBtn').textContent = EN ? 'عربي' : 'English';
+const splash = $('splash');
+setTimeout(() => splash.classList.add('gone'), 3600);
+splash.onclick = () => splash.classList.add('gone');
+</script>
+</body>
+</html>
