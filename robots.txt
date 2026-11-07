@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tahwil-converter-app.vercel.app/sitemap.xml
