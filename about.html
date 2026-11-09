@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عن Tahwil · About · Adam Raslan</title>
+<meta name="description" content="عن Tahwil ومطوّره Adam Raslan (آدم رسلان): محوّل وحدات ثنائي اللغة، وأدوات بالـ Python والويب.">
+<meta name="author" content="Adam Raslan">
+<link rel="canonical" href="https://tahwil-converter-app.vercel.app/about.html">
+
+<style>
+:root{--bg1:#eef2ff;--bg2:#fdf2f8;--card:rgba(255,255,255,.85);--tx:#1e1b4b;--mut:#64668a;--ac:#6366f1;--ac2:#ec4899;--bd:rgba(99,102,241,.18);--sh:0 10px 30px -12px rgba(79,70,229,.35);--inp:#fff}
+[data-theme="dark"]{--bg1:#0b0d1f;--bg2:#1a0b2e;--card:rgba(30,33,60,.78);--tx:#eef0ff;--mut:#9aa0c8;--ac:#818cf8;--ac2:#f472b6;--bd:rgba(129,140,248,.2);--sh:0 10px 30px -12px rgba(0,0,0,.6);--inp:#151833}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+html[lang="en"] .ar,html[lang="ar"] .en{display:none}
+body{margin:0;min-height:100vh;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;color:var(--tx);background:linear-gradient(135deg,var(--bg1),var(--bg2)) fixed}
+#splash{position:fixed;inset:0;z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b0d1f;color:#fff;overflow:hidden;transition:opacity .8s ease,visibility .8s,transform .8s ease;cursor:pointer;text-align:center}
+#splash.gone{opacity:0;visibility:hidden;transform:scale(1.08)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:float 12s ease-in-out infinite alternate}
+.b1{width:420px;height:420px;background:#6366f1;top:-120px;left:-100px}
+.b2{width:380px;height:380px;background:#ec4899;bottom:-120px;right:-80px;animation-delay:-4s}
+.b3{width:300px;height:300px;background:#22d3ee;top:40%;left:55%;animation-delay:-8s}
+@keyframes float{to{transform:translate(60px,-40px) scale(1.15)}}
+.ring{position:relative;width:150px;height:150px;display:grid;place-items:center}
+.ring::before{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:#fff;border-right-color:#ec4899;animation:spin 1.6s linear infinite}
+.ring::after{content:"";position:absolute;inset:14px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+.sp-logo{font-size:4rem;animation:logoIn 1s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes logoIn{from{transform:scale(0) rotate(-180deg);opacity:0}to{transform:none;opacity:1}}
+.title{font-size:3.6rem;font-weight:900;letter-spacing:3px;margin-top:18px;background:linear-gradient(90deg,#fff,#c7d2fe,#fbcfe8,#fff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 3s linear infinite,rise .9s .3s both}
+@keyframes shine{to{background-position:300% 0}}
+@keyframes rise{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.tag{margin:10px 0 0;font-size:1.05rem;opacity:0;animation:rise .9s .8s forwards}
+.bar{width:220px;height:3px;background:rgba(255,255,255,.18);border-radius:9px;margin-top:28px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#f0abfc);animation:load 2.2s .2s ease forwards}
+@keyframes load{to{width:100%}}
+.by{margin-top:20px;font-size:.9rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;background:linear-gradient(90deg,#fff 0%,#f0abfc 25%,#fff 50%,#22d3ee 75%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:rise .9s 1.1s forwards,wave 3s 2s linear infinite}
+@keyframes wave{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.skip{position:absolute;bottom:22px;font-size:.75rem;opacity:.5}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 20px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px);background:var(--card);border-bottom:1px solid var(--bd)}
+.logo{font-size:1.2rem;font-weight:700;text-decoration:none}
+.grad,.hero b{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+nav a{color:var(--mut);text-decoration:none;margin-inline-start:12px;font-weight:600;font-size:.92rem}
+nav a:hover{color:var(--ac)}
+.ctrl{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:999px;padding:5px 12px;font-size:.85rem;margin-inline-start:10px;cursor:pointer}
+main{max-width:800px;margin:0 auto;padding:24px 16px 30px}
+section{scroll-margin-top:70px}
+.hero{text-align:center;padding:14px 0 22px}
+.hero h1{font-size:2.3rem;margin:0 0 8px}
+.sub,.note{color:var(--mut);font-size:.92rem;margin:0 0 14px}
+#search{width:100%;max-width:520px;padding:14px 18px;border-radius:999px;border:1px solid var(--bd);background:var(--inp);color:var(--tx);font:inherit;font-size:1rem;outline:none}
+#search:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--bd)}
+.card{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--bd);border-radius:22px;padding:22px;box-shadow:var(--sh);margin-bottom:18px}
+h2{margin:0 0 14px;font-size:1.3rem}
+h3{margin:18px 0 8px;font-size:1rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select{flex:1;min-width:110px;padding:12px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--inp);color:var(--tx);font:inherit;font-size:1.03rem;outline:none}
+input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--bd)}
+button{padding:11px 18px;border:0;border-radius:14px;background:linear-gradient(90deg,var(--ac),var(--ac2));color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:hover{filter:brightness(1.08)}
+.ghost{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+.swap{flex:0 0 auto;padding:11px 14px}
+.result{font-size:1.9rem;font-weight:800;margin:18px 0 10px;word-break:break-all;direction:ltr;text-align:start;min-height:2.3rem;cursor:copy;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--ac);font-weight:600;padding:6px 0}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.95rem}
+td{padding:9px 8px;border-bottom:1px solid var(--bd)}
+td+td{text-align:end;direction:ltr;font-weight:600;font-variant-numeric:tabular-nums}
+.rates{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
+.rates label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--mut)}
+.rates input{min-width:0;padding:9px}
+.cards4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.mini{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px}
+.mini span{color:var(--mut);font-size:.85rem}
+.mini b{display:block;font-size:1.2rem;direction:ltr;text-align:start;margin-top:6px;word-break:break-all}
+footer{text-align:center;color:var(--mut);font-size:.85rem;padding:20px}
+</style>
+<style>
+.about-wrap{max-width:760px;margin:0 auto;padding:40px 20px 60px}
+.about-wrap h1{font-size:2rem;margin:0 0 6px;color:var(--gold)}
+.about-wrap .sub{color:var(--mut);margin:0 0 26px}
+.about-wrap h2{text-align:start;font-size:1.25rem;margin:30px 0 10px}
+.about-wrap p,.about-wrap li{color:var(--tx);line-height:1.9;font-size:1rem}
+.about-wrap ul{padding-inline-start:20px}
+.about-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.about-links a{padding:11px 18px;border-radius:12px;border:1px solid var(--bd);text-decoration:none;background:var(--card)}
+.about-links a:hover{border-color:var(--gold)}
+.about-card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:24px;box-shadow:var(--sh)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="index.html"><span class="grad">🔄 Tahwil</span></a>
+  <nav>
+    <a href="index.html#units"><span class="ar">الوحدات</span><span class="en">Units</span></a>
+    <a href="index.html#cat-currency"><span class="ar">العملات</span><span class="en">Currency</span></a>
+    <a href="index.html#date"><span class="ar">الهجري</span><span class="en">Hijri</span></a>
+    <a href="index.html#numbers"><span class="ar">الأعداد</span><span class="en">Numbers</span></a>
+    <a href="about.html" class="on"><span class="ar">عن</span><span class="en">About</span></a>
+    <button class="ctrl" id="langBtn">English</button>
+    <button class="ctrl" id="themeBtn" title="Theme">🌓</button>
+  </nav>
+</header>
+
+<main class="about-wrap">
+  <div class="about-card">
+    <h1><span class="ar">عن Tahwil</span><span class="en">About Tahwil</span></h1>
+    <p class="sub"><span class="ar">محوّل وحدات شامل ومجاني، بالعربي والإنجليزي</span><span class="en">A free, complete unit converter in Arabic and English</span></p>
+
+    <h2><span class="ar">إيه هو Tahwil؟</span><span class="en">What is Tahwil?</span></h2>
+    <p><span class="ar">Tahwil أداة بتحوّل بين الوحدات بسرعة: الطول والوزن والحجم والمساحة والسرعة والوقت والضغط والطاقة والبيانات والحرارة، ومعاها العملات بأسعار محدّثة، والتاريخ الهجري والميلادي، والأنظمة العددية.</span><span class="en">Tahwil converts between units quickly: length, mass, volume, area, speed, time, pressure, energy, data and temperature. It also includes currencies with updated rates, Hijri and Gregorian dates, and number systems.</span></p>
+
+    <h2><span class="ar">المميزات</span><span class="en">Features</span></h2>
+    <ul>
+      <li><span class="ar">تحويل فوري لكل الوحدات مع جدول بكل التحويلات</span><span class="en">Instant conversion for every unit, with a full table of results</span></li>
+      <li><span class="ar">أسعار العملات بتتحدّث من مصدر حقيقي</span><span class="en">Currency rates updated from a live source</span></li>
+      <li><span class="ar">تحويل التاريخ بين الهجري والميلادي</span><span class="en">Hijri and Gregorian date conversion</span></li>
+      <li><span class="ar">وضع ليلي ونهاري، ونسخ للنتيجة بضغطة</span><span class="en">Dark and light mode, and tap a result to copy it</span></li>
+    </ul>
+
+    <h2><span class="ar">المطوّر</span><span class="en">The developer</span></h2>
+    <p><span class="ar">اتعمل بواسطة <b>Adam Raslan</b> (آدم رسلان)، مطوّر Python وويب من مصر.</span><span class="en">Built by <b>Adam Raslan</b> (آدم رسلان), a Python and web developer from Egypt.</span></p>
+    <div class="about-links">
+      <a href="https://www.linkedin.com/in/adam-raslan-912a42436/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/raslanadam300-commits" target="_blank" rel="noopener">GitHub</a>
+      <a href="index.html"><span class="ar">ارجع للمحوّل</span><span class="en">Back to converter</span></a>
+    </div>
+  </div>
+</main>
+
+<footer>Tahwil · by Adam Raslan</footer>
+<script>
+document.getElementById('langBtn').onclick = () => {
+  const en = document.documentElement.lang === 'en';
+  localStorage.setItem('tahwil-lang', en ? 'ar' : 'en');
+  location.reload();
+};
+document.getElementById('langBtn').textContent = document.documentElement.lang === 'en' ? 'عربي' : 'English';
+document.getElementById('themeBtn').onclick = () => {
+  const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem('tahwil-theme', t);
+};
+</script>
+</body>
+</html>
